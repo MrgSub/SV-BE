@@ -8,27 +8,28 @@ var cors = require('cors');
 const app = express();
 const port = process.env.PORT || 4000;
 
+const credentials = {
+	installed: {
+		client_id:
+			'991785683014-pqljkg48rd7o130d68off9mnfmuhakf8.apps.googleusercontent.com',
+		project_id: 'temporal-tensor-239501',
+		auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+		token_uri: 'https://oauth2.googleapis.com/token',
+		auth_provider_x509_cert_url:
+			'https://www.googleapis.com/oauth2/v1/certs',
+		client_secret: '8pP3GS8tY6ImmdzXXgx01TVt',
+		redirect_uri: 'https://sl-sv.herokuapp.com/AuthUrl/getToken'
+	}
+};
+const clientSecret = credentials.installed.client_secret;
+const clientId = credentials.installed.client_id;
+const redirectUrl = credentials.installed.redirect_uri;
+
 app.use(cors());
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/AuthUrl', (req, res) => {
-	var credentials = {
-		installed: {
-			client_id:
-				'991785683014-pqljkg48rd7o130d68off9mnfmuhakf8.apps.googleusercontent.com',
-			project_id: 'temporal-tensor-239501',
-			auth_uri: 'https://accounts.google.com/o/oauth2/auth',
-			token_uri: 'https://oauth2.googleapis.com/token',
-			auth_provider_x509_cert_url:
-				'https://www.googleapis.com/oauth2/v1/certs',
-			client_secret: '8pP3GS8tY6ImmdzXXgx01TVt',
-			redirect_uri: 'https://sl-sv.herokuapp.com/AuthUrl/getToken'
-		}
-	};
-	var clientSecret = credentials.installed.client_secret;
-	var clientId = credentials.installed.client_id;
-	var redirectUrl = credentials.installed.redirect_uri;
 	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
 	var authUrl = oauth2Client.generateAuthUrl({
 		scope: SCOPES
@@ -37,7 +38,15 @@ app.get('/AuthUrl', (req, res) => {
 });
 
 app.get('/AuthUrl/getToken', (req, res) => {
-	res.send(req.query);
+	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
+	oauth2Client.getToken(req.query.code, function(err, token) {
+		if (err) {
+			console.log('Error while trying to retrieve access token', err);
+			return;
+		}
+		oauth2Client.credentials = token;
+	});
+	res.send(oauth2Client.credentials);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
