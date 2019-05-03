@@ -37,7 +37,7 @@ app.get('/AuthUrl', (req, res) => {
 });
 
 app.get('/AuthUrl/getToken', (req, res) => {
-	res.send({ req });
+	res.send(req);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
