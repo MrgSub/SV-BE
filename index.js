@@ -39,7 +39,7 @@ app.get('/AuthUrl', (req, res) => {
 
 async function getToken(oauth2Client, code) {
 	let resp = await oauth2Client.getToken(code);
-	return resp.response;
+	return resp;
 }
 
 app.get('/AuthUrl/getToken', (req, res) => {
@@ -49,7 +49,7 @@ app.get('/AuthUrl/getToken', (req, res) => {
 			res.json(resp);
 		})
 		.catch(err => {
-			res.json(err);
+			res.send(err);
 		});
 });
 
