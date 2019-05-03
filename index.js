@@ -37,16 +37,16 @@ app.get('/AuthUrl', (req, res) => {
 	res.send({ authUrl });
 });
 
+async function getToken(oauth2Client, code) {
+	let resp = await oauth2Client.getToken(code);
+	return resp;
+}
+
 app.get('/AuthUrl/getToken', (req, res) => {
 	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
-	oauth2Client.getToken(req.query.code, function(err, token) {
-		if (err) {
-			console.log('Error while trying to retrieve access token', err);
-			return;
-		}
-		oauth2Client.credentials = token;
+	getToken(oauth2Client, req.query.code).then(resp => {
+		res.send(resp);
 	});
-	res.send(oauth2Client.credentials);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
