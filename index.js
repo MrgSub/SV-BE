@@ -45,8 +45,8 @@ app.get('/AuthUrl/getToken', (req, res) => {
 			return;
 		}
 		oauth2Client.credentials = token;
+		res.send(token);
 	});
-	res.send(oauth2Client.credentials);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
