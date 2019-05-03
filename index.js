@@ -22,12 +22,13 @@ app.get('/AuthUrl', (req, res) => {
 			token_uri: 'https://oauth2.googleapis.com/token',
 			auth_provider_x509_cert_url:
 				'https://www.googleapis.com/oauth2/v1/certs',
-			client_secret: '8pP3GS8tY6ImmdzXXgx01TVt'
+			client_secret: '8pP3GS8tY6ImmdzXXgx01TVt',
+			redirect_uri: 'https://sl-sv.herokuapp.com/AuthUrl/getToken'
 		}
 	};
 	var clientSecret = credentials.installed.client_secret;
 	var clientId = credentials.installed.client_id;
-	//var redirectUrl = credentials.installed.redirect_uris[0];
+	var redirectUrl = credentials.installed.redirect_uri;
 	var oauth2Client = new OAuth2(clientId, clientSecret);
 	var authUrl = oauth2Client.generateAuthUrl({
 		scope: SCOPES
