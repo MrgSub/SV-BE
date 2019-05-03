@@ -27,8 +27,8 @@ app.get('/AuthUrl', (req, res) => {
 	};
 	var clientSecret = credentials.installed.client_secret;
 	var clientId = credentials.installed.client_id;
-	var redirectUrl = credentials.installed.redirect_uris[0];
-	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
+	//var redirectUrl = credentials.installed.redirect_uris[0];
+	var oauth2Client = new OAuth2(clientId, clientSecret);
 	var authUrl = oauth2Client.generateAuthUrl({
 		scope: SCOPES
 	});
