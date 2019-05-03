@@ -23,7 +23,7 @@ app.get('/AuthUrl', (req, res) => {
 			auth_provider_x509_cert_url:
 				'https://www.googleapis.com/oauth2/v1/certs',
 			client_secret: 'N-jxydtMMfIasWfOukh6tXI1',
-			redirect_uris: ['http://localhost:4000/AuthUrl/getToken']
+			redirect_uris: ['https://sl-sv.herokuapp.com/AuthUrl/getToken']
 		}
 	};
 	var clientSecret = credentials.installed.client_secret;
