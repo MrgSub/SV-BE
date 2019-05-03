@@ -44,9 +44,13 @@ async function getToken(oauth2Client, code) {
 
 app.get('/AuthUrl/getToken', (req, res) => {
 	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
-	getToken(oauth2Client, req.query.code).then(resp => {
-		res.send(resp);
-	});
+	getToken(oauth2Client, req.query.code)
+		.then(resp => {
+			res.send(resp);
+		})
+		.catch(err => {
+			res.json(err);
+		});
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
