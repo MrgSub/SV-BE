@@ -46,10 +46,10 @@ app.get('/AuthUrl/getToken', (req, res) => {
 	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
 	getToken(oauth2Client, req.query.code)
 		.then(resp => {
-			res.json(resp.response);
+			res.json(resp);
 		})
 		.catch(err => {
-			res.json(err);
+			res.json(err.response);
 		});
 });
 
