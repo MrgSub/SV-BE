@@ -14,16 +14,14 @@ app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/AuthUrl', (req, res) => {
 	var credentials = {
-		web: {
-			client_id:
-				'991785683014-pqljkg48rd7o130d68off9mnfmuhakf8.apps.googleusercontent.com',
-			project_id: 'temporal-tensor-239501',
-			auth_uri: 'https://accounts.google.com/o/oauth2/auth',
-			token_uri: 'https://oauth2.googleapis.com/token',
-			auth_provider_x509_cert_url:
-				'https://www.googleapis.com/oauth2/v1/certs',
-			client_secret: '8pP3GS8tY6ImmdzXXgx01TVt'
-		}
+		client_id:
+			'991785683014-pqljkg48rd7o130d68off9mnfmuhakf8.apps.googleusercontent.com',
+		project_id: 'temporal-tensor-239501',
+		auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+		token_uri: 'https://oauth2.googleapis.com/token',
+		auth_provider_x509_cert_url:
+			'https://www.googleapis.com/oauth2/v1/certs',
+		client_secret: '8pP3GS8tY6ImmdzXXgx01TVt'
 	};
 	var clientSecret = credentials.installed.client_secret;
 	var clientId = credentials.installed.client_id;
