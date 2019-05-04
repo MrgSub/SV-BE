@@ -47,9 +47,7 @@ app.get('/AuthUrl/getToken', (req, res) => {
 		if (err) {
 			res.send(err);
 		}
-		this.token = token;
-		res.cookie('SE', this.token);
-		res.send(this.token);
+		res.send(token);
 	});
 });
 
