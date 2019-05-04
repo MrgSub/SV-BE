@@ -47,7 +47,7 @@ app.get('/AuthUrl/getToken', (req, res) => {
 		if (err) {
 			res.send(err);
 		}
-		this.test = 123;
+		this.test = '{e}';
 		res.send(this.test);
 	});
 });
