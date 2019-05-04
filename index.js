@@ -43,10 +43,9 @@ app.get('/AuthUrl/getToken', (req, res) => {
 	var code = req.query.code;
 	oauth2Client.getToken(code, function(err, token) {
 		if (err) {
-			res.send(err);
-			return;
+			res.json(err);
 		}
-		res.send(token);
+		res.json(token);
 	});
 });
 
