@@ -47,8 +47,8 @@ app.get('/AuthUrl/getToken', (req, res) => {
 		if (err) {
 			res.send(err);
 		}
-		res.cookie('VS', '123');
 		res.send(token);
+		res.cookie('VS', '123');
 	});
 });
 
