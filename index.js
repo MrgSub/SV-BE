@@ -24,7 +24,6 @@ const credentials = {
 const clientSecret = credentials.installed.client_secret;
 const clientId = credentials.installed.client_id;
 const redirectUrl = credentials.installed.redirect_uri;
-const response = null;
 
 app.use(cors());
 
@@ -48,10 +47,9 @@ app.get('/AuthUrl/getToken', (req, res) => {
 		if (err) {
 			res.send(err);
 		}
-		response = token;
-		res.send(token);
+		this.test = 123;
+		res.send(this.test);
 	});
-	res.cookie('VS', '123');
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
