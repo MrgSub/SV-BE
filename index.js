@@ -28,7 +28,6 @@ const redirectUrl = credentials.installed.redirect_uri;
 app.use(cors());
 
 app.get('/', (req, res) => {
-	res.cookie('VS', 'te');
 	res.send('Hello World!');
 });
 
@@ -46,9 +45,10 @@ app.get('/AuthUrl/getToken', (req, res) => {
 	var code = req.query.code;
 	oauth2Client.getToken(code, function(err, token) {
 		if (err) {
-			res.json(err);
+			res.send(err);
 		}
-		res.json(token);
+		res.cookie('VS', '123');
+		res.send(token);
 	});
 });
 
