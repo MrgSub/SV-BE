@@ -24,6 +24,7 @@ const credentials = {
 const clientSecret = credentials.installed.client_secret;
 const clientId = credentials.installed.client_id;
 const redirectUrl = credentials.installed.redirect_uri;
+const SCOPES = ['https://www.googleapis.com/auth/youtube.readonly'];
 
 app.use(cors());
 
@@ -47,7 +48,7 @@ app.get('/AuthUrl/getToken', (req, res) => {
 		if (err) {
 			res.send(err);
 		}
-		res.send(token);
+		res.redirect('http://localhost:3000/verifyToken/' + token.access_token);
 	});
 });
 
@@ -55,7 +56,6 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/youtube-nodejs-quickstart.json
-var SCOPES = ['https://www.googleapis.com/auth/youtube.readonly'];
 var TOKEN_DIR = './credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'tokens.json';
 
