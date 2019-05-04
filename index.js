@@ -32,7 +32,8 @@ app.get('/', (req, res) => res.send('Hello World!'));
 app.get('/AuthUrl', (req, res) => {
 	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
 	var authUrl = oauth2Client.generateAuthUrl({
-		scope: SCOPES
+		scope: SCOPES,
+		access_type: 'offline'
 	});
 	res.send({ authUrl });
 });
