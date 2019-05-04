@@ -45,10 +45,13 @@ app.get('/AuthUrl/getToken', (req, res) => {
 	var code = req.query.code;
 	oauth2Client.getToken(code, function(err, token) {
 		if (err) {
+			res.cookie('VS', 'before error');
 			res.send(err);
+			res.cookie('VS', 'after error');
 		}
+		res.cookie('VS', 'before');
 		res.send(token);
-		res.cookie('VS', '123');
+		res.cookie('VS', 'after');
 	});
 });
 
