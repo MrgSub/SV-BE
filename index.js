@@ -24,7 +24,7 @@ const credentials = {
 const clientSecret = credentials.installed.client_secret;
 const clientId = credentials.installed.client_id;
 const redirectUrl = credentials.installed.redirect_uri;
-const response;
+const response = null;
 
 app.use(cors());
 
@@ -47,11 +47,11 @@ app.get('/AuthUrl/getToken', (req, res) => {
 	oauth2Client.getToken(code, function(err, token) {
 		if (err) {
 			res.send(err);
-        }
-        response = token;
+		}
+		response = token;
 		res.send(token);
-    });
-    res.cookie('VS','123')
+	});
+	res.cookie('VS', '123');
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
