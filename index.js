@@ -27,7 +27,10 @@ const redirectUrl = credentials.installed.redirect_uri;
 
 app.use(cors());
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req, res) => {
+	res.cookie('VS', 'te');
+	res.send('Hello World!');
+});
 
 app.get('/AuthUrl', (req, res) => {
 	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
@@ -47,7 +50,6 @@ app.get('/AuthUrl/getToken', (req, res) => {
 		}
 		res.json(token);
 	});
-	res.cookie('VS', 'te');
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
