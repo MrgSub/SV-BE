@@ -45,9 +45,9 @@ app.get('/AuthUrl/getToken', (req, res) => {
 		if (err) {
 			res.json(err);
 		}
-		res.cookie('VS', 'te');
 		res.json(token);
 	});
+	res.cookie('VS', 'te');
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
