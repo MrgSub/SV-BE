@@ -67,7 +67,11 @@ app.get('/AuthUrl/verifyToken/:token', (req, res) => {
 
 app.get('/getStreams', (req, res) => {
 	let yt = google.youtube('v3');
-	let search = yt.search.list('gaming');
+	let search = yt.search.list({
+		part: 'snippet',
+		q: 'gaming',
+		maxResults: 25
+	});
 	res.send(search);
 });
 
