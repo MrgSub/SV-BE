@@ -58,10 +58,10 @@ app.get('/AuthUrl/verifyToken/:token', (req, res) => {
 	oauth2Client
 		.getTokenInfo(token)
 		.then(resp => {
-			res.send({ message: resp });
+			res.send({ message: 'valid', data: resp });
 		})
 		.catch(err => {
-			res.send({ message: err });
+			res.send({ message: 'error', data: err });
 		});
 });
 
