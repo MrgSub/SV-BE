@@ -67,12 +67,18 @@ app.get('/AuthUrl/verifyToken/:token', (req, res) => {
 
 app.get('/getStreams', (req, res) => {
 	let yt = google.youtube('v3');
-	let search = yt.search.list({
-		part: 'snippet',
-		q: 'gaming',
-		maxResults: 25
-	});
-	res.send(search);
+	let search = yt.search
+		.list({
+			part: 'snippet',
+			q: 'gaming',
+			maxResults: 25
+		})
+		.then(resp => {
+			res.send(search);
+		})
+		.catch(err => {
+			res.send(err);
+		});
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
