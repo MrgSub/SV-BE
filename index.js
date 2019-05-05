@@ -75,7 +75,7 @@ app.get('/getStreams', (req, res) => {
 			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8'
 		})
 		.then(resp => {
-			res.send(search);
+			res.send(resp);
 		})
 		.catch(err => {
 			res.send(err);
