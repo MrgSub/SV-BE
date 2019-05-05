@@ -71,7 +71,8 @@ app.get('/getStreams', (req, res) => {
 		.list({
 			part: 'snippet',
 			q: 'gaming',
-			maxResults: 25
+			maxResults: 25,
+			key: clientSecret
 		})
 		.then(resp => {
 			res.send(search);
