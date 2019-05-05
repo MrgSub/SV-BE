@@ -65,6 +65,12 @@ app.get('/AuthUrl/verifyToken/:token', (req, res) => {
 		});
 });
 
+app.get('/getStreams', (req, res) => {
+	let yt = google.youtube('v3');
+	let search = yt.search('gaming');
+	res.send(search);
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // If modifying these scopes, delete your previously saved credentials
