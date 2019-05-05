@@ -52,6 +52,25 @@ app.get('/AuthUrl/getToken', (req, res) => {
 	});
 });
 
+app.get('/AuthUrl/verifyToken/:token', (req, res) => {
+	var oauth2Client = new OAuth2(clientId, clientSecret);
+	let token = req.params.token;
+	oauth2Client
+		.getTokenInfo(token)
+		.then(resp => {
+			res.send({ message: resp });
+		})
+		.catch(err => {
+			res.send({ message: err });
+		});
+	// oauth2Client.getToken(code, function(err, token) {
+	// 	if (err) {
+	// 		res.send(err);
+	// 	}
+	// 	res.redirect('http://localhost:3000/verifyToken/' + token.access_token);
+	// });
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // If modifying these scopes, delete your previously saved credentials
