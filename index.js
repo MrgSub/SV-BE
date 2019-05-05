@@ -72,7 +72,7 @@ app.get('/getStreams', (req, res) => {
 			part: 'snippet',
 			q: 'gaming',
 			maxResults: 25,
-			key: clientSecret
+			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8'
 		})
 		.then(resp => {
 			res.send(search);
