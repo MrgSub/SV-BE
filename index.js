@@ -63,12 +63,6 @@ app.get('/AuthUrl/verifyToken/:token', (req, res) => {
 		.catch(err => {
 			res.send({ message: err });
 		});
-	// oauth2Client.getToken(code, function(err, token) {
-	// 	if (err) {
-	// 		res.send(err);
-	// 	}
-	// 	res.redirect('http://localhost:3000/verifyToken/' + token.access_token);
-	// });
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
