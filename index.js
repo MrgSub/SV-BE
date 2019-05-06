@@ -67,16 +67,17 @@ app.get('/AuthUrl/verifyToken/:token', (req, res) => {
 
 app.get('/getStreams', (req, res) => {
 	let yt = google.youtube('v3');
-	let search = yt.search
+	yt.search
 		.list({
 			part: 'snippet',
 			q: 'gaming',
-			maxResults: 25,
+			maxResults: 50,
 			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
 			order: 'viewCount',
 			videoEmbeddable: true,
 			type: 'video',
-			eventType: 'live'
+			eventType: 'live',
+			videoCategoryId: 20
 		})
 		.then(resp => {
 			res.send(resp);
