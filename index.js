@@ -93,7 +93,8 @@ app.get('/videoInfo/:id', (req, res) => {
 	yt.videos
 		.list({
 			id: id,
-			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8'
+			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
+			part: 'snippet,contentDetails,statistics,liveStreamingDetails'
 		})
 		.then(resp => {
 			res.send(resp);
