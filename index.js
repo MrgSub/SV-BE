@@ -72,7 +72,7 @@ app.get('/getStreams', (req, res) => {
 			part: 'snippet',
 			q: 'gaming',
 			maxResults: 50,
-			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
+			key: 'AIzaSyCSqk_6Fl0u07FiE3rNzYhjGmR3xVOCdTQ',
 			order: 'viewCount',
 			videoEmbeddable: true,
 			type: 'video',
@@ -93,7 +93,7 @@ app.get('/videoInfo/:id', (req, res) => {
 	yt.videos
 		.list({
 			id: id,
-			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
+			key: 'AIzaSyCSqk_6Fl0u07FiE3rNzYhjGmR3xVOCdTQ',
 			part: 'snippet,contentDetails,statistics,liveStreamingDetails'
 		})
 		.then(resp => {
@@ -110,7 +110,7 @@ app.get('/getMessages/:chat', (req, res) => {
 	yt.liveChatMessages
 		.list({
 			liveChatId: chat,
-			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
+			key: 'AIzaSyCSqk_6Fl0u07FiE3rNzYhjGmR3xVOCdTQ',
 			part: 'snippet,authorDetails'
 		})
 		.then(resp => {
