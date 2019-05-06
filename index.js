@@ -92,7 +92,8 @@ app.get('/videoInfo/:id', (req, res) => {
 	let id = req.params.id;
 	yt.videos
 		.list({
-			id: id
+			id: id,
+			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8'
 		})
 		.then(resp => {
 			res.send(resp);
