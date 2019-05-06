@@ -87,6 +87,39 @@ app.get('/getStreams', (req, res) => {
 		});
 });
 
+app.get('/videoInfo/:id', (req, res) => {
+	let yt = google.youtube('v3');
+	let id = req.params.id;
+	yt.videos
+		.list({
+			id: id
+		})
+		.then(resp => {
+			res.send(resp);
+		})
+		.catch(err => {
+			res.send(err);
+		});
+	// yt.search
+	// 	.list({
+	// 		part: 'snippet',
+	// 		q: 'gaming',
+	// 		maxResults: 50,
+	// 		key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
+	// 		order: 'viewCount',
+	// 		videoEmbeddable: true,
+	// 		type: 'video',
+	// 		eventType: 'live',
+	// 		videoCategoryId: 20,
+	// 	})
+	// 	.then(resp => {
+	// 		res.send(resp);
+	// 	})
+	// 	.catch(err => {
+	// 		res.send(err);
+	// 	});
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // If modifying these scopes, delete your previously saved credentials
