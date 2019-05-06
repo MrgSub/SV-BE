@@ -102,24 +102,23 @@ app.get('/videoInfo/:id', (req, res) => {
 		.catch(err => {
 			res.send(err);
 		});
-	// yt.search
-	// 	.list({
-	// 		part: 'snippet',
-	// 		q: 'gaming',
-	// 		maxResults: 50,
-	// 		key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
-	// 		order: 'viewCount',
-	// 		videoEmbeddable: true,
-	// 		type: 'video',
-	// 		eventType: 'live',
-	// 		videoCategoryId: 20,
-	// 	})
-	// 	.then(resp => {
-	// 		res.send(resp);
-	// 	})
-	// 	.catch(err => {
-	// 		res.send(err);
-	// 	});
+});
+
+app.get('/getMessages/:chat', (req, res) => {
+	let yt = google.youtube('v3');
+	let chat = req.params.chat;
+	yt.liveChatMessages
+		.list({
+			liveChatId: chat,
+			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
+			part: 'snippet,authorDetails'
+		})
+		.then(resp => {
+			res.send(resp);
+		})
+		.catch(err => {
+			res.send(err);
+		});
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
