@@ -72,7 +72,11 @@ app.get('/getStreams', (req, res) => {
 			part: 'snippet',
 			q: 'gaming',
 			maxResults: 25,
-			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8'
+			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
+			order: 'viewCount',
+			videoEmbeddable: true,
+			type: 'video',
+			eventType: 'live'
 		})
 		.then(resp => {
 			res.send(resp);
