@@ -134,7 +134,7 @@ app.post('/sendMessage/:chat', (req, res) => {
 	let chat = req.params.chat;
 	yt.liveChatMessages
 		.insert({
-			auth: token,
+			oauth_token: token,
 			part: 'snippet',
 			requestBody: {
 				snippet: {
