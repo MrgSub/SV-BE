@@ -36,7 +36,7 @@ app.get('/AuthUrl', (req, res) => {
 	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
 	var authUrl = oauth2Client.generateAuthUrl({
 		scope: SCOPES,
-		access_type: 'offline'
+		access_type: 'online'
 	});
 	res.send({ authUrl });
 });
@@ -111,7 +111,8 @@ app.get('/getMessages/:chat', (req, res) => {
 		.list({
 			liveChatId: chat,
 			key: 'AIzaSyATlepSulVlbubMYHmwtiVSIRSgarkhiEU',
-			part: 'snippet,authorDetails'
+			part: 'snippet,authorDetails',
+			profileImageSize: 50
 		})
 		.then(resp => {
 			res.send(resp);
