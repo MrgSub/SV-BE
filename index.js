@@ -6,6 +6,7 @@ var OAuth2 = google.auth.OAuth2;
 const express = require('express');
 var cors = require('cors');
 const app = express();
+app.use(express.json());
 const port = process.env.PORT || 4000;
 
 const credentials = {
