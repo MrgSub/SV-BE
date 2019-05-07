@@ -136,11 +136,13 @@ app.post('/sendMessage/:chat', (req, res) => {
 		.insert({
 			oauth_token: token,
 			part: 'snippet',
-			snippet: {
-				type: 'textMessageEvent',
-				liveChatId: chat,
-				textMessageDetails: {
-					messageText: message
+			requestBody: {
+				snippet: {
+					type: 'textMessageEvent',
+					liveChatId: chat,
+					textMessageDetails: {
+						messageText: String(message)
+					}
 				}
 			}
 		})
