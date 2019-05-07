@@ -76,7 +76,7 @@ app.get('/getStreams', (req, res) => {
 		.list({
 			part: 'snippet',
 			q: 'gaming',
-			maxResults: 1,
+			maxResults: 10,
 			key: 'AIzaSyATlepSulVlbubMYHmwtiVSIRSgarkhiEU',
 			order: 'viewCount',
 			videoEmbeddable: true,
