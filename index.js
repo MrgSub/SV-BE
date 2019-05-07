@@ -24,7 +24,11 @@ const credentials = {
 const clientSecret = credentials.installed.client_secret;
 const clientId = credentials.installed.client_id;
 const redirectUrl = credentials.installed.redirect_uri;
-const SCOPES = ['https://www.googleapis.com/auth/youtube.readonly'];
+const SCOPES = [
+	'https://www.googleapis.com/auth/youtube.readonly',
+	'https://www.googleapis.com/auth/youtube',
+	'https://www.googleapis.com/auth/youtube.force-ssl'
+];
 
 app.use(cors());
 
@@ -36,7 +40,7 @@ app.get('/AuthUrl', (req, res) => {
 	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
 	var authUrl = oauth2Client.generateAuthUrl({
 		scope: SCOPES,
-		access_type: 'online'
+		access_type: 'offline'
 	});
 	res.send({ authUrl });
 });
@@ -113,6 +117,28 @@ app.get('/getMessages/:chat', (req, res) => {
 			key: 'AIzaSyATlepSulVlbubMYHmwtiVSIRSgarkhiEU',
 			part: 'snippet,authorDetails',
 			profileImageSize: 50
+		})
+		.then(resp => {
+			res.send(resp);
+		})
+		.catch(err => {
+			res.send(err);
+		});
+});
+
+app.post('/sendMessage/:chat', (req, res) => {
+	let yt = google.youtube('v3');
+	let message = req.body.message;
+	let token = req.body.token;
+	let chat = req.params.chat;
+	yt.liveChatMessages
+		.insert({
+			liveChatId: chat,
+			oauth_token: token,
+			part: 'snippet',
+			textMessageDetails: {
+				messageText: message
+			}
 		})
 		.then(resp => {
 			res.send(resp);
