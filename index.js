@@ -174,6 +174,26 @@ app.post('/sendMessage/:chat', (req, res) => {
 		});
 });
 
+async function getStoreMessages(chat) {
+	await MongoClient.connect(url, function(err, client) {
+		assert.equal(null, err);
+		const db = client.db();
+		const collection = db.collection(DB.collection);
+		collection
+			.find({
+				requestBody: {
+					snippet: {
+						liveChatId: chat
+					}
+				}
+			})
+			.toArray(function(err, docs) {
+				assert.equal(err, null);
+				res.send({ result: docs });
+			});
+	});
+}
+
 async function storeMessage(message, token, chat) {
 	await MongoClient.connect(url, function(err, client) {
 		assert.equal(null, err);
