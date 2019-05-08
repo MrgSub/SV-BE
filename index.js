@@ -174,25 +174,7 @@ app.post('/sendMessage/:chat', (req, res) => {
 		});
 });
 
-async function getStoredMessages(chat) {
-	return await MongoClient.connect(url, function(err, client) {
-		assert.equal(null, err);
-		const db = client.db();
-		const collection = db.collection(DB.collection);
-		collection
-			.find({
-				requestBody: {
-					snippet: {
-						liveChatId: chat
-					}
-				}
-			})
-			.toArray(function(err, docs) {
-				assert.equal(err, null);
-				return { test: '123' };
-			});
-	});
-}
+async function getStoredMessages(chat) {}
 
 async function storeMessage(message, token, chat) {
 	return await MongoClient.connect(url, function(err, client) {
@@ -228,13 +210,23 @@ async function storeMessage(message, token, chat) {
 
 app.get('/getStoredMessages/:chat', (req, res) => {
 	let chat = req.params.chat;
-	getStoredMessages(chat)
-		.then(resp => {
-			res.send(resp);
-		})
-		.catch(err => {
-			res.send(err);
-		});
+	MongoClient.connect(url, function(err, client) {
+		assert.equal(null, err);
+		const db = client.db();
+		const collection = db.collection(DB.collection);
+		collection
+			.find({
+				requestBody: {
+					snippet: {
+						liveChatId: chat
+					}
+				}
+			})
+			.toArray(function(err, docs) {
+				assert.equal(err, null);
+				res.send({ result: docs });
+			});
+	});
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
