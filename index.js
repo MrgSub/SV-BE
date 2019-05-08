@@ -226,6 +226,17 @@ async function storeMessage(message, token, chat) {
 	});
 }
 
+app.get('/getStoredMessages/:chat', (req, res) => {
+	let chat = req.params.chat;
+	getStoredMessages(chat)
+		.then(resp => {
+			res.send(resp);
+		})
+		.catch(err => {
+			res.send(err);
+		});
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // // If modifying these scopes, delete your previously saved credentials
