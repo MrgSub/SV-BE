@@ -189,7 +189,7 @@ async function getStoredMessages(chat) {
 			})
 			.toArray(function(err, docs) {
 				assert.equal(err, null);
-				res.send({ result: docs });
+				return { result: docs };
 			});
 	});
 }
@@ -214,10 +214,10 @@ async function storeMessage(message, token, chat) {
 				}
 			})
 			.then(resp => {
-				res.send(resp);
+				return resp;
 			})
 			.catch(err => {
-				res.send(err);
+				return err;
 			});
 		// collection.find().toArray(function(err, docs) {
 		// 	assert.equal(err, null);
