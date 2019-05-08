@@ -189,7 +189,7 @@ async function getStoredMessages(chat) {
 			})
 			.toArray(function(err, docs) {
 				assert.equal(err, null);
-				return { result: docs };
+				return { test: '123' };
 			});
 	});
 }
