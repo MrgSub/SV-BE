@@ -167,46 +167,36 @@ app.post('/sendMessage/:chat', (req, res) => {
 			}
 		})
 		.then(resp => {
-			res.send(resp);
+			MongoClient.connect(url, function(err, client) {
+				assert.equal(null, err);
+				const db = client.db();
+				const collection = db.collection(DB.collection);
+				collection
+					.insertOne({
+						oauth_token: token,
+						part: 'snippet',
+						requestBody: {
+							snippet: {
+								type: 'textMessageEvent',
+								liveChatId: chat,
+								textMessageDetails: {
+									messageText: String(message)
+								}
+							}
+						}
+					})
+					.then(resp => {
+						res.send(resp);
+					})
+					.catch(err => {
+						res.send(err);
+					});
+			});
 		})
 		.catch(err => {
 			res.send(err);
 		});
 });
-
-async function getStoredMessages(chat) {}
-
-async function storeMessage(message, token, chat) {
-	return await MongoClient.connect(url, function(err, client) {
-		assert.equal(null, err);
-		const db = client.db();
-		const collection = db.collection(DB.collection);
-		collection
-			.insertOne({
-				oauth_token: token,
-				part: 'snippet',
-				requestBody: {
-					snippet: {
-						type: 'textMessageEvent',
-						liveChatId: chat,
-						textMessageDetails: {
-							messageText: String(message)
-						}
-					}
-				}
-			})
-			.then(resp => {
-				return resp;
-			})
-			.catch(err => {
-				return err;
-			});
-		// collection.find().toArray(function(err, docs) {
-		// 	assert.equal(err, null);
-		// 	res.send({ result: docs });
-		// });
-	});
-}
 
 app.get('/getStoredMessages/:chat', (req, res) => {
 	let chat = req.params.chat;
