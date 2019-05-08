@@ -175,7 +175,7 @@ app.post('/sendMessage/:chat', (req, res) => {
 });
 
 async function getStoredMessages(chat) {
-	await MongoClient.connect(url, function(err, client) {
+	return await MongoClient.connect(url, function(err, client) {
 		assert.equal(null, err);
 		const db = client.db();
 		const collection = db.collection(DB.collection);
@@ -195,7 +195,7 @@ async function getStoredMessages(chat) {
 }
 
 async function storeMessage(message, token, chat) {
-	await MongoClient.connect(url, function(err, client) {
+	return await MongoClient.connect(url, function(err, client) {
 		assert.equal(null, err);
 		const db = client.db();
 		const collection = db.collection(DB.collection);
