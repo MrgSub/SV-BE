@@ -73,7 +73,9 @@ app.get('/AuthUrl/getToken', (req, res) => {
 		if (err) {
 			res.send(err);
 		}
-		res.redirect('http://localhost:3000/verifyToken/' + token.access_token);
+		res.redirect(
+			'http://sv-fe.herokuapp.com/verifyToken/' + token.access_token
+		);
 	});
 });
 
