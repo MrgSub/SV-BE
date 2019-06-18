@@ -1,224 +1,99 @@
-const express = require('express');
-var { google } = require('googleapis');
-var OAuth2 = google.auth.OAuth2;
-var cors = require('cors');
+var app = require('./app');
+var http = require('http').createServer(app);
+var port = process.env.PORT || 4000;
+var io = require('socket.io')(http);
+var jwt = require('jsonwebtoken');
+var config = require('./config');
+var Chat = require('./Modules/Chat');
 
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
-const DB = {
-	host: 'ds161335.mlab.com',
-	port: '61335',
-	db: 'heroku_m85xw6d6',
-	username: 'sv',
-	password: 'VhYQWyucSPCK8Jg',
-	collection: 'VS_ChatMessages'
-};
-const url =
-	'mongodb://' +
-	DB.username +
-	':' +
-	DB.password +
-	'@' +
-	DB.host +
-	':' +
-	DB.port +
-	'/' +
-	DB.db;
-
-const app = express();
-app.use(express.json());
-const port = process.env.PORT || 4000;
-
-const credentials = {
-	installed: {
-		client_id:
-			'991785683014-pqljkg48rd7o130d68off9mnfmuhakf8.apps.googleusercontent.com',
-		project_id: 'temporal-tensor-239501',
-		auth_uri: 'https://accounts.google.com/o/oauth2/auth',
-		token_uri: 'https://oauth2.googleapis.com/token',
-		auth_provider_x509_cert_url:
-			'https://www.googleapis.com/oauth2/v1/certs',
-		client_secret: '8pP3GS8tY6ImmdzXXgx01TVt',
-		redirect_uri: 'https://sl-sv.herokuapp.com/AuthUrl/getToken'
-	}
-};
-const clientSecret = credentials.installed.client_secret;
-const clientId = credentials.installed.client_id;
-const redirectUrl = credentials.installed.redirect_uri;
-const SCOPES = [
-	'https://www.googleapis.com/auth/youtube.readonly',
-	'https://www.googleapis.com/auth/youtube',
-	'https://www.googleapis.com/auth/youtube.force-ssl'
-];
-
-app.use(cors());
-
-app.get('/', (req, res) => {
-	res.send('Hello World!');
+app.listen(port, function() {
+	console.log('Express server listening on port ' + port);
 });
 
-app.get('/AuthUrl', (req, res) => {
-	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
-	var authUrl = oauth2Client.generateAuthUrl({
-		scope: SCOPES,
-		access_type: 'offline'
-	});
-	res.send({ authUrl });
+http.listen(port + 1, function() {
+	console.log('Socket.IO server listening on port ' + (port + 1));
 });
 
-app.get('/AuthUrl/getToken', (req, res) => {
-	var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
-	var code = req.query.code;
-	oauth2Client.getToken(code, function(err, token) {
-		if (err) {
-			res.send(err);
+// function parseCookies(header) {
+// 	let cookies = [];
+// 	let headersSplit = header.split(';');
+// 	headersSplit.forEach(element => {
+// 		let cookie = element.split('=');
+// 		let key = cookie[0];
+// 		let value = cookie[1];
+// 		cookies.push({ [key]: value });
+// 	});
+// 	return cookies;
+// }
+
+function verifyToken(token) {
+	return jwt.verify(token, config.secret, function(error, decoded) {
+		if (error) {
+			return error.message;
 		}
-		res.redirect(
-			'http://sv-fe.herokuapp.com/verifyToken/' + token.access_token
-		);
+		return decoded;
+	});
+}
+
+io.on('connection', function(socket) {
+	socket.on('verifyToken', (token, callback) => {
+		let data = verifyToken(token);
+		if (data && data.id) {
+			callback({ data });
+		} else {
+			callback(false);
+		}
+	});
+	// Chat.create({
+	// 	listing: '001',
+	// 	parties: ['aboud', 'john'],
+	// 	messages: [
+	// 		{
+	// 			from: 'aboud',
+	// 			to: 'john',
+	// 			content: 'Hello John'
+	// 		}
+	// 	]
+	// });
+	// Chat.updateOne(
+	// 	{ _id: '5cfc44ff21318ef9d8e2a951' },
+	// 	{
+	// 		$push: {
+	// 			messages: [
+	// 				{ from: 'aboud', to: 'john', content: 'New Message' }
+	// 			]
+	// 		}
+	// 	},
+	// 	{},
+	// 	function(err, data) {
+	// 		console.info(data);
+	// 	}
+	// );
+	socket.on('getUserChats', (token, callback) => {
+		let data = verifyToken(token);
+		if (data && data.id) {
+			return Chat.find({ parties: data.username })
+				.sort({ 'messages.date': 1 })
+				.exec(function(err, data) {
+					if (err) {
+						return callback({ error: err });
+					}
+					return callback(data);
+				});
+		} else {
+			return callback(false);
+		}
 	});
 });
 
-app.get('/AuthUrl/verifyToken/:token', (req, res) => {
-	var oauth2Client = new OAuth2(clientId, clientSecret);
-	let token = req.params.token;
-	oauth2Client
-		.getTokenInfo(token)
-		.then(resp => {
-			res.send({ message: 'valid', data: resp });
-		})
-		.catch(err => {
-			res.send({ message: 'error', data: err });
-		});
-});
+// io.on('connection', function(socket) {
+// 	let headers = socket.handshake.headers.cookie;
+// 	let cookies = parseCookies(headers);
+// 	let token = verifyToken(cookies[0].XAuth);
+// 	if (token.id) {
+//         console.info(token.username + ' has connected!');
 
-app.get('/getStreams', (req, res) => {
-	let yt = google.youtube('v3');
-	yt.search
-		.list({
-			part: 'snippet',
-			q: 'gaming',
-			maxResults: 10,
-			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
-			order: 'viewCount',
-			videoEmbeddable: true,
-			type: 'video',
-			eventType: 'live',
-			videoCategoryId: 20
-		})
-		.then(resp => {
-			res.send(resp);
-		})
-		.catch(err => {
-			res.send(err);
-		});
-});
-
-app.get('/videoInfo/:id', (req, res) => {
-	let yt = google.youtube('v3');
-	let id = req.params.id;
-	yt.videos
-		.list({
-			id: id,
-			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
-			part: 'snippet,contentDetails,statistics,liveStreamingDetails'
-		})
-		.then(resp => {
-			res.send(resp);
-		})
-		.catch(err => {
-			res.send(err);
-		});
-});
-
-app.get('/getMessages/:chat', (req, res) => {
-	let yt = google.youtube('v3');
-	let chat = req.params.chat;
-	yt.liveChatMessages
-		.list({
-			liveChatId: chat,
-			key: 'AIzaSyDfTwSjJw5NxH-vI_Sqj8apAY5PWkoLrN8',
-			part: 'snippet,authorDetails',
-			profileImageSize: 50
-		})
-		.then(resp => {
-			res.send(resp);
-		})
-		.catch(err => {
-			res.send(err);
-		});
-});
-
-app.post('/sendMessage/:chat', (req, res) => {
-	let yt = google.youtube('v3');
-	let message = req.body.message;
-	let token = req.body.token;
-	let chat = req.params.chat;
-	yt.liveChatMessages
-		.insert({
-			oauth_token: token,
-			part: 'snippet',
-			requestBody: {
-				snippet: {
-					type: 'textMessageEvent',
-					liveChatId: chat,
-					textMessageDetails: {
-						messageText: String(message)
-					}
-				}
-			}
-		})
-		.then(resp => {
-			MongoClient.connect(url, function(err, client) {
-				assert.equal(null, err);
-				const db = client.db();
-				const collection = db.collection(DB.collection);
-				collection
-					.insertOne({
-						oauth_token: token,
-						part: 'snippet',
-						requestBody: {
-							snippet: {
-								type: 'textMessageEvent',
-								liveChatId: chat,
-								textMessageDetails: {
-									messageText: String(message)
-								}
-							}
-						}
-					})
-					.then(resp => {
-						res.send(resp);
-					})
-					.catch(err => {
-						res.send(err);
-					});
-			});
-		})
-		.catch(err => {
-			res.send(err);
-		});
-});
-
-app.get('/getStoredMessages/:chat', (req, res) => {
-	let chat = req.params.chat;
-	MongoClient.connect(url, function(err, client) {
-		assert.equal(null, err);
-		const db = client.db();
-		const collection = db.collection(DB.collection);
-		collection
-			.find({
-				requestBody: {
-					snippet: {
-						liveChatId: chat
-					}
-				}
-			})
-			.toArray(function(err, docs) {
-				assert.equal(err, null);
-				res.send({ result: docs });
-			});
-	});
-});
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// 	} else {
+// 		console.info('guest has connected!');
+// 	}
+// });
