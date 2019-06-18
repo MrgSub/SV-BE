@@ -10,7 +10,7 @@ app.listen(port, function() {
 	console.log('Express server listening on port ' + port);
 });
 
-http.listen(port + 1, function() {
+http.listen(Number(port) + 1, function() {
 	console.log('Socket.IO server listening on port ' + (port + 1));
 });
 
