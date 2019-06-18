@@ -10,9 +10,9 @@ app.listen(port, function() {
 	console.log('Express server listening on port ' + port);
 });
 
-http.listen(Number(port) + 1, function() {
-	console.log('Socket.IO server listening on port ' + (port + 1));
-});
+// http.listen(Number(port) + 1, function() {
+// 	console.log('Socket.IO server listening on port ' + (port + 1));
+// });
 
 // function parseCookies(header) {
 // 	let cookies = [];
